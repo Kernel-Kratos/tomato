@@ -1,4 +1,4 @@
-package tomato.com.restaurant.modal;
+package tomato.com.restaurant.model;
 
 import org.hibernate.annotations.NaturalId;
 
@@ -7,6 +7,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,7 +22,7 @@ import lombok.Setter;
 public class Restaurant {
     /*@GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;*/
-    @Id
+    //@Id
     @Column(unique = true)
     private String licenseNo;
     private String name;
@@ -32,10 +34,13 @@ public class Restaurant {
     @NaturalId
     @Column(unique = true, nullable = false)
     private int phoneNumber;
-    @NaturalId
+    @Id
     @Column(unique = true, nullable = false)
     private String email;
     @Column(nullable = false)
     private String password;
 
+    @OneToOne
+    @JoinColumn(name = "menu_id")
+    private Menu menu;
 }
