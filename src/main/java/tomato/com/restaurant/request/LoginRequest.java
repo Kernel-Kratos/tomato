@@ -1,12 +1,12 @@
 package tomato.com.restaurant.request;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 @Data
-public class RestaurantLoginRequest {
-    private String firstName;
-    private String lastName;
-    private int phoneNumber;
+public class LoginRequest {
+    @NotBlank
     private String email;
+    @NotBlank
     private String password;
 }
