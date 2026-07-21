@@ -4,7 +4,7 @@ import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import tomato.com.restaurant.modal.Restaurant;
+import tomato.com.restaurant.model.Restaurant;
 
 public interface RestaurantRepository extends JpaRepository<Restaurant, String> {
 
