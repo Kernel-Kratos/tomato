@@ -3,11 +3,14 @@ package tomato.com.restaurant.security.config;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -19,15 +22,17 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import lombok.RequiredArgsConstructor;
 import tomato.com.restaurant.security.JWT.AuthTokenFilter;
 import tomato.com.restaurant.security.JWT.JwtAuthenticationEntryPoint;
+import tomato.com.restaurant.security.filter.RateLimitFilter;
 import tomato.com.restaurant.security.user.CustomUserDetailsService;
 
 @RequiredArgsConstructor
 @Configuration
+@EnableMethodSecurity
 public class SecurityConfig {
     private final CustomUserDetailsService customUserDetailsService;
     private final JwtAuthenticationEntryPoint authEntryPoint;
 
-    private static final List<String> SECURED_URLS = new ArrayList<>();
+    private static final List<String> SECURED_URLS = List.of("/tomato/hello");
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -47,6 +52,8 @@ public class SecurityConfig {
         authProvider.setPasswordEncoder(passwordEncoder());
         return authProvider;
     }
+    @Autowired
+    public StringRedisTemplate redisTemplate;
     @Bean
     public SecurityFilterChain filterChain (HttpSecurity httpSecurity)  {
         httpSecurity.csrf(AbstractHttpConfigurer :: disable)
@@ -56,6 +63,7 @@ public class SecurityConfig {
             .anyRequest().permitAll());
             httpSecurity.authenticationProvider(daoAuthenticationProvider());
             httpSecurity.addFilterBefore(authTokenFilter(), UsernamePasswordAuthenticationFilter.class);
+            httpSecurity.addFilterAfter(new RateLimitFilter(redisTemplate), AuthTokenFilter.class);
         return httpSecurity.build();
     } 
 } 
