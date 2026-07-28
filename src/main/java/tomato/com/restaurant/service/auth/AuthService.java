@@ -22,8 +22,6 @@ public class AuthService implements IAuthService {
     private final JwtUtils jwtUtils;
     @Override
     public User validateRefreshToken(String refreshToken) {
-        System.err.println(refreshToken);
-        System.out.println(refreshToken.length());
         RefreshToken token = refreshTokenRepository.findById(UUID.fromString(refreshToken))
                 .orElseThrow(() -> new RefreshTokenNotFoundException("refresh token now found"));
         if (!token.isRevoked()){
