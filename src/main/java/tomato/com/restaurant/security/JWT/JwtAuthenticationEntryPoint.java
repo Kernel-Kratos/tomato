@@ -12,7 +12,6 @@ import org.springframework.stereotype.Component;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import tools.jackson.databind.ObjectMapper;
 
 @Component
 public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
@@ -25,10 +24,8 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
         final Map<String, Object> body = new HashMap<>();
         body.put("error", "Unauthorized");
-        body.put("message", "you should login to continue");
-
-        final ObjectMapper mapper = new ObjectMapper();
-        mapper.writeValue(response.getOutputStream(), body);
+        body.put("message", "you should login to continue\n");
+        return;
     }
 
 }

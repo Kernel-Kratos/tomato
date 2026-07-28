@@ -56,7 +56,7 @@ public class JwtUtils {
 //Principal represents the currently authenticated user or system. 
     public String getUserNameFromToken(String token){
         return Jwts.parser()
-                .decryptWith(key())
+                .verifyWith(key())
                 .build()
                 .parseSignedClaims(token)
                 .getPayload().getSubject();
@@ -65,7 +65,7 @@ public class JwtUtils {
     public boolean validateToken(String token){
         try {
             Jwts.parser()
-                    .decryptWith(key())
+                    .verifyWith(key())
                     .build()
                     .parseSignedClaims(token);
             return true;
