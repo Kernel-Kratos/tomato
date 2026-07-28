@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 import tomato.com.restaurant.data.RoleConstants;
 import tomato.com.restaurant.exceptions.AlreadyExistsException;
+import tomato.com.restaurant.exceptions.ResourceNotFoundException;
 import tomato.com.restaurant.model.Role;
 import tomato.com.restaurant.model.User;
 import tomato.com.restaurant.repository.RoleRepository;
@@ -23,7 +24,8 @@ public class UserService implements IUserService{
     private final RoleRepository roleRepository;
     
     public User findUserByEmail(String email){
-        User user = findUserByEmail(email);
+        User user = userRepository.findByEmail(email)
+        .orElseThrow(() -> new ResourceNotFoundException("User Not found"));
         return user;
     }
     @Override
