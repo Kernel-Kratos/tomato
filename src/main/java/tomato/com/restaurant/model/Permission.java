@@ -26,5 +26,7 @@ public class Permission {
     @JoinColumn(name = "role_id")
     private Role role;
 
-   
+   public Permission (String permissionName){
+    this.permissionName = permissionName;
+   }
 }
