@@ -1,4 +1,4 @@
-package tomato.com.restaurant.security.JWT;
+package tomato.com.restaurant.security.filter;
 
 import java.io.IOException;
 
@@ -15,6 +15,7 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import tomato.com.restaurant.security.JWT.JwtUtils;
 import tomato.com.restaurant.security.user.CustomUserDetailsService;
 
 public class AuthTokenFilter extends OncePerRequestFilter {
