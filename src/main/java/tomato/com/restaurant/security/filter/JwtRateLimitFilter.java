@@ -14,11 +14,11 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import tomato.com.restaurant.security.user.CustomUserDetails;
 
-public class RateLimitFilter extends OncePerRequestFilter{
+public class JwtRateLimitFilter extends OncePerRequestFilter{
     private final StringRedisTemplate redisTemplate;
     private final static int MAX_REQUESTS_PER_MINUTE = 5;
 
-    public RateLimitFilter(StringRedisTemplate redisTemplate) {
+    public JwtRateLimitFilter(StringRedisTemplate redisTemplate) {
         this.redisTemplate = redisTemplate;
     }
     @Override
