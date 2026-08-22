@@ -27,7 +27,7 @@ public class Menu {
     private Long id;
 
     @OneToMany(mappedBy = "menu", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<FoodItems> foodItems =  new HashSet<>();
+    private Set<FoodItem> foodItems =  new HashSet<>();
 
     @OneToOne(mappedBy = "menu", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Restaurant restaurant;
