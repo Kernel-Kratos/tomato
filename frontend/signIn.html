@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html data-theme="dark">
+    <head>
+        <title>SignIn To Tomato</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="color-scheme" content="dark">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.colors.min.css">
+        <style>
+            :root {
+                --pico-primary: var(--pico-color-red-550);
+                --pico-primary-background: var(--pico-color-red-550);
+                --pico-primary-hover: var(--pico-color-red-650);
+                --pico-primary-hover-background: var(--pico-color-red-650);
+                --pico-primary-focus: rgba(229, 57, 53, 0.25);
+            }
+            h2.tomato-heading {
+                color: var(--pico-primary);
+                text-align: center;
+                margin-bottom: 1rem;
+            }
+            article.tomato-card {
+                border-top: 4px solid var(--pico-primary);
+                box-shadow: 0 4px 15px rgba(229, 57, 53, 0.1);
+            }
+        </style>
+    </head>
+    <body>
+        <main class="container" style="max-width: 400px; margin-top: 10vh;">
+            <article class="tomato-card">
+                <h2 class="tomato-heading">Welcome</h2>
+                
+                <form id="create">
+                    <label>Email: 
+                        <input type="email" placeholder="enter your email" id="email" name="email" required>
+                    </label>
+                    
+                    <label>Password: 
+                        <input type="password" placeholder="enter your password" id="password" name="password" required>
+                    </label>
+                    
+                    <button type="submit">Login</button>
+                </form>
+            </article>
+
+            <script src="js/auth.js"></script>
+        </main>    
+    </body>
+</html>
