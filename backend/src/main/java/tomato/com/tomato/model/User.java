@@ -54,4 +54,7 @@ public class User {
     
     @OneToMany(mappedBy = "user")
     private Collection<RefreshToken> refreshToken = new HashSet<>();
+    
+    @OneToMany(mappedBy = "user")    
+    private Collection<Restaurant> restaurant = new HashSet<>();
 }

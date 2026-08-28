@@ -4,8 +4,12 @@ import org.hibernate.annotations.NaturalId;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -18,27 +22,23 @@ import lombok.Setter;
 @AllArgsConstructor
 @Entity
 public class Restaurant {
-    /*@GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;*/
-    //@Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    private long id;
     @Column(unique = true)
     private String licenseNo;
     private String name;
     private String address;
 
-    //move this to user,java later
-    private String firstName;
-    private String lastName;
-    @NaturalId
-    @Column(unique = true, nullable = false)
-    private int phoneNumber;
-    @Id
-    @Column(unique = true, nullable = false)
-    private String email;
-    @Column(nullable = false)
-    private String password;
-
     @OneToOne
     @JoinColumn(name = "menu_id")
     private Menu menu;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @ManyToOne
+    @JoinColumn(name = "franchise_id")
+    private Franchise franchise;
 }
