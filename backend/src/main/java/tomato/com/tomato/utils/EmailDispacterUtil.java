@@ -4,12 +4,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.stereotype.Component;
 
 
+@Component
+@Async
 public class EmailDispacterUtil {
 
     @Value("${spring.mail.email}")
-    private static String mailSender;
+    private String mailSender;
 
     @Autowired
     private JavaMailSender javaMailSender;
@@ -23,6 +27,7 @@ public class EmailDispacterUtil {
             mailMessage.setText(body);
             javaMailSender.send(mailMessage);
         } catch (Exception e) {
+            System.out.println(e.getMessage());
            System.out.print("Error email was not send");
         }
     }
