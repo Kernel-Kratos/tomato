@@ -1,6 +1,5 @@
 package tomato.com.tomato.service.user;
 
-import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -29,20 +28,29 @@ public class UserService implements IUserService{
         return user;
     }
     @Override
-    public User createCustomer(SignUpRequest request) {
-        return  Optional.of(request)
-                .filter(req -> !userRepository.existsByEmail(request.getEmail()))
-                .map(req -> {
-                    User newUser = new User();
-                    newUser.setFirstName(request.getFirstName());
-                    newUser.setLastName(request.getLastName());
-                    newUser.setEmail(request.getEmail());
-                    newUser.setPassword(passwordEncoder.encode(request.getPassword()));
+    public User createUser(SignUpRequest request) {
+        if(!userRepository.existsByEmail(request.getEmail())) {
+            User newUser = new User();
+            newUser.setFirstName(request.getFirstName());
+            newUser.setLastName(request.getLastName());
+            newUser.setEmail(request.getEmail());
+            newUser.setPassword(passwordEncoder.encode(request.getPassword()));
+            switch (request.getRole().toLowerCase()) {
+                case "restaurant-owner":
+                    newUser.setRoles(Set.of(findByRoleName(RoleConstants.owner)));
+                    break;
+                case "customer":
                     newUser.setRoles(Set.of(findByRoleName(RoleConstants.customer)));
-                    return userRepository.save(newUser);
-                })
-                .orElseThrow(() -> new AlreadyExistsException("User Already Exists. Please login in."));
+                    break;
+                default:
+                    newUser.setRoles(Set.of(findByRoleName(RoleConstants.customer)));
+                    break;
+            }
+            return userRepository.save(newUser);
+        }
+        throw new AlreadyExistsException("User already exists");
     }
+    
     @Override
     public Role findByRoleName(String roleName) {
          Role role = roleRepository.findByRoleName(roleName)

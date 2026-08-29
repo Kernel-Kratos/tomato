@@ -6,7 +6,7 @@ import tomato.com.tomato.model.User;
 import tomato.com.tomato.request.SignUpRequest;
 
 public interface IUserService {
-    User createCustomer(SignUpRequest request);
+    User createUser(SignUpRequest request);
     Role findByRoleName(String role);
     User findUserByEmail(String email);
 
