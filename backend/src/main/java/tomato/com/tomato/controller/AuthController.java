@@ -1,7 +1,8 @@
 package tomato.com.tomato.controller;
 
-import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 import static org.springframework.http.HttpStatus.UNPROCESSABLE_CONTENT;
+
+import java.util.stream.Collectors;
 
 import org.springframework.security.core.AuthenticationException;
 
@@ -17,30 +18,36 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
+import tomato.com.tomato.dto.UserDto;
+import tomato.com.tomato.exceptions.AlreadyExistsException;
 import tomato.com.tomato.exceptions.RefreshTokenException;
 import tomato.com.tomato.exceptions.ResourceNotFoundException;
 import tomato.com.tomato.model.RefreshToken;
 import tomato.com.tomato.model.User;
 import tomato.com.tomato.request.LoginRequest;
 import tomato.com.tomato.request.RefreshTokenRequest;
+import tomato.com.tomato.request.SignUpRequest;
 import tomato.com.tomato.response.ApiResponse;
 import tomato.com.tomato.response.JwtResponse;
 import tomato.com.tomato.response.RefreshTokenResponse;
 import tomato.com.tomato.security.JWT.JwtUtils;
 import tomato.com.tomato.security.user.CustomUserDetails;
 import tomato.com.tomato.service.auth.IAuthService;
+import tomato.com.tomato.service.email.IEmailService;
 import tomato.com.tomato.service.refreshToken.RefreshTokenService;
 import tomato.com.tomato.service.user.IUserService;
+import tools.jackson.databind.JsonNode;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("tomato/auth")
+@RequestMapping("api/v1/auth")
 public class AuthController {
     private final RefreshTokenService refreshTokenService;
     private final IUserService userService;
     private final IAuthService authService;
     private final AuthenticationManager authenticationManager;
     private final JwtUtils jwtUtils;
+    private final IEmailService emailService;
 
     @PostMapping("/login")
     public ResponseEntity<ApiResponse> login(@Valid @RequestBody LoginRequest request){
@@ -70,4 +77,24 @@ public class AuthController {
             return ResponseEntity.status(401).body(new ApiResponse("Token expired. Relogin", null));
         }
     }
+
+    @PostMapping("/otp")
+    public ResponseEntity<ApiResponse> otpForEmailVerification (@RequestBody JsonNode email) {
+        if (email.has("email")){
+            emailService.emailSender(email.get("email").asString());
+            return ResponseEntity.ok().body(new ApiResponse(null, null));
+        }
+        return ResponseEntity.status(400).body(new ApiResponse(null, null));
+    }
+    @PostMapping("/verify-otp")
+    private ResponseEntity<ApiResponse> otpVerification (@RequestBody JsonNode otp){
+        if(otp.has("email") && otp.has("otp")){
+            if(emailService.emailOtpVerification(otp.get("email").asString(), otp.get("otp").asString())){
+                return ResponseEntity.ok().body(new ApiResponse(null, null));
+            }
+            return ResponseEntity.status(404).body(new ApiResponse(null, null));
+        }
+        return ResponseEntity.status(400).body(new ApiResponse("null", null));
+    }
+
 }
