@@ -97,4 +97,19 @@ public class AuthController {
         return ResponseEntity.status(400).body(new ApiResponse("null", null));
     }
 
+    @PostMapping("/signup")
+    public ResponseEntity<ApiResponse> createUser(@Valid @RequestBody SignUpRequest request){
+        try{
+            User user = userService.createUser(request);
+            UserDto userDto = new UserDto();
+            userDto.setFirstName(user.getFirstName());
+            userDto.setLastName(user.getLastName());
+            userDto.setId(user.getId());
+            userDto.setRoles(user.getRoles().stream().map(role -> role.getRoleName()).collect(Collectors.toSet()));
+            return ResponseEntity.status(201).body(new ApiResponse(userDto)); 
+        } catch (AlreadyExistsException e) {
+            return ResponseEntity.status(409).body(new ApiResponse(e.getMessage(), null));
+        }
+    }
+
 }
