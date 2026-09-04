@@ -1,7 +1,9 @@
 package tomato.com.tomato.model;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 
 import org.hibernate.annotations.NaturalId;
 
@@ -53,8 +55,11 @@ public class User {
     private Collection<Permission> permissions;
     
     @OneToMany(mappedBy = "user")
-    private Collection<RefreshToken> refreshToken = new HashSet<>();
+    private List<RefreshToken> refreshTokens = new ArrayList<>();
     
     @OneToMany(mappedBy = "user")    
-    private Collection<Restaurant> restaurant = new HashSet<>();
+    private List<Restaurant> restaurants = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user")
+    private List<Franchise> franchises = new ArrayList<>();
 }
